@@ -1,30 +1,29 @@
 import qrcode
+import random
+import string
+import time
 
-# URL or any text you want to encode
+def generate_qrcode(input_text):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    
+    qr.add_data(input_text)
+    qr.make(fit=True)
 
-print("Hello user. Welcome to QR Code for URL.")
-print("Enter the URL here: ")
-input_url = input()
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.show()
+def generate_input_text(no_characters):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    input_text = ''.join(random.choices(characters,k = no_characters))
+    return input_text
+    
+def dynamic_qrcode(no_characters,no_images):
+    for i in range(no_images):
+        generate_qrcode(generate_input_text(no_characters))
+        time.sleep(5)
 
-
-# Create QR code instance
-qr = qrcode.QRCode(
-    version=1,  # controls size of QR code: 1 is smallest
-    error_correction=qrcode.constants.ERROR_CORRECT_L,  # error correction level
-    box_size=10,  # size of each box in the QR code
-    border=4,  # thickness of the border (default 4)
-)
-
-# Add data
-qr.add_data(input_url)
-qr.make(fit=True)
-
-# Create an image
-img = qr.make_image(fill_color="black", back_color="white")
-
-img.show() #without saving the image you can also show your image
-
-# Save the image
-img.save("output.png")
-
-print("QR Code generated and saved as output.png")
+dynamic_qrcode(12,5)
